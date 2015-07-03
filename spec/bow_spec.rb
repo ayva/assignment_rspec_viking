@@ -27,7 +27,7 @@ describe Bow do
     end
     it 'throws an error when has 0 arrows' do
       bow0=Bow.new(0)
-      expect(bow0.use).to raise 'RuntimeError'
+      expect{bow0.use}.to raise_error(RuntimeError)
     end
 
   end
