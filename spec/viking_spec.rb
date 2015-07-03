@@ -1,5 +1,7 @@
 # Your code here
 require 'viking'
+require 'weapons/axe'
+require 'weapons/weapon'
 
 describe Viking do
   let(:viking){Viking.new}
@@ -56,7 +58,7 @@ describe Viking do
   end
 
   describe "#receive attack" do
-
+    let(:viking2){Viking.new}
     it "reduces health by specified amount" do
       steve = Viking.new("Steve")
       damage_dealt = 25
@@ -72,11 +74,44 @@ describe Viking do
 
   end
   describe "#attack" do
-    it "causes the recipients health to drop"
-    it "calls vikings take_damage method"
-    it "runs method damage_received if no weapon"
-    it "deals fist multiplier * strength damage if no weapon"
-    it "deals strength * weapon damage if attacking with weapon"
+    it "causes the recipients health to drop" do
+      viking2=Viking.new
+      viking.attack(viking2)
+      viking.attack(viking2)
+      expect(viking2.health).to eq(95)
+    end
+
+    it "calls vikings take_damage method" do
+      viking2=Viking.new
+      expect(viking2).to receive(:take_damage)
+      viking.attack(viking2)
+    end
+
+    it "runs method damage_with_fists if no weapon" do
+      viking2=Viking.new
+
+      expect(viking).to receive(:damage_with_fists).and_return(10)
+      viking.attack(viking2)
+    end
+
+    it "deals fist multiplier * strength damage if no weapon" do
+      viking2=Viking.new
+      multiplier = Fists.new.use
+      
+      expect(viking2.health).to eq(100)
+      viking.attack(viking2)
+      expect(viking2.health).to eq(100-multiplier*viking.strength)
+    end
+
+    it "deals strength * weapon damage if attacking with weapon" do
+     
+      axe=double("axe", :use => 1, :is_a? => true)
+       viking2=Viking.new(weapon=axe)
+      
+      viking2.attack(viking)
+      expect(viking.health).to eq(100-weapon.use*viking2.strength)
+
+    end
     it "uses fists instead of bow if no arrows"
   end
   describe "#check_death" do
