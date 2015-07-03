@@ -15,17 +15,32 @@ describe Viking do
       expect(steve.health).to eq(50)
     end
 
-    it "has a health that cannot be overwritten" #do
-    #   steve = Viking.new(health = 50)
-    #   expect(steve).to respond_to(:health)
-    # end
+    it "has a health that cannot be overwritten" do
+      expect(viking).not_to respond_to(:health=)
+     end
 
-    it "has a weapon that starts out new by default"
+    it "has a weapon that starts out nil by default" do
+      expect(viking.weapon.nil?).to eq(true)
+    end
   end
   describe "#pick_up_weapon" do
-    it "sets a vikings weapon"
-    it "raises an exception if applied to non-weapon object"
-    it "replaces existing weapon"
+    it "sets a vikings weapon" do
+      #weapon=instance_double("weapon", :is_a? => true)
+      weapon=double( :is_a? => true)
+      expect(viking.pick_up_weapon(weapon)).to eq(weapon)
+
+    end
+    it "raises an exception if applied to non-weapon object" do
+      array=Array.new
+      expect{viking.pick_up_weapon(array)}.to raise_error(RuntimeError)
+    end
+    it "replaces existing weapon" do
+      axe = double( :is_a? => true)
+      sword = double( :is_a? => true)
+      steve = Viking.new("Steve", weapon = axe)
+      expect(steve.pick_up_weapon(sword)).not_to eq(axe)
+
+    end
   end
   describe "#drop weapon" do
     it "removes a weapon"
