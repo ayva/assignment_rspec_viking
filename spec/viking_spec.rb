@@ -104,17 +104,31 @@ describe Viking do
     end
 
     it "deals strength * weapon damage if attacking with weapon" do
-     
-      axe=double("axe", :use => 1, :is_a? => true)
-       viking2=Viking.new(weapon=axe)
-      
+      # axe=double("axe", :use => 1, :is_a? => true)
+      axe = Axe.new
+      viking2=Viking.new
+      viking2.pick_up_weapon(axe)
+      viking2.weapon
       viking2.attack(viking)
-      expect(viking.health).to eq(100-weapon.use*viking2.strength)
-
+      expect(viking.health).to eq(100-axe.use*viking2.strength)
     end
-    it "uses fists instead of bow if no arrows"
+
+    it "uses fists instead of bow if no arrows" do
+      bow = Bow.new(0)
+      viking2 = Viking.new
+      viking2.pick_up_weapon(bow)
+      viking2.attack(viking)
+      expect(viking.health).to eq(97.5)
+    end
   end
+
   describe "#check_death" do
-    it "raises an error if health == 0"
+
+    it "raises an error if health == 0" do
+      viking2 = Viking.new
+      viking = Viking.new("bob", 2.5)
+      expect{viking2.attack(viking)}.to raise_error(RuntimeError)
+    end
   end
+
 end
